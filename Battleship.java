@@ -18,8 +18,9 @@ public class Battleship {
 	private static int[] hits = {0, 0};
 	private static boolean startGame = false;
 	
-	// Reads a file called fileName and loads a two-dimensional array called board with the file's contents
-	public static void loadFile(char[][] board, String fileName) throws IOException {
+	// Reads a file and loads a two-dimensional array with the file's contents
+	public static void loadFile(
+		char[][] board, String fileName) throws IOException {
 		BufferedReader inputStream = null;
 
 		try {
@@ -46,6 +47,7 @@ public class Battleship {
 		}
 	}
 	
+	//Check which ship sank
 	public static String whichShip(char letter) {
 		switch (letter) {
 			case 'C':
@@ -61,23 +63,28 @@ public class Battleship {
 		}
 		return "";
 	}
-	
-	public static String shipSank(char[][] board, char whichShipSank, String playerOrCpu) { // Displays ship sank message
+
+	// Displays ship sank message
+	public static String shipSank(char[][] board, 
+								  char whichShipSank, 
+								  String playerOrCpu) { 
 		for (int row = 0; row < board.length; row++) {
 			for (int col = 0; col < board[row].length; col++) {
-				if (board[row][col] == whichShipSank) { // Checks to see if the ship that was hit still exists on the board
+				if (board[row][col] == whichShipSank) {
 					 whichShipSank = ' ';
 				}
 			}
 		}
 		
-		if (whichShipSank != ' ') { // If the ship no longer exists on the board, display a message
+		if (whichShipSank != ' ') { 
 			return playerOrCpu + whichShip(whichShipSank);
 		}
 		return ""; 
 	}
 	
-	public static void setConstraints(int top, int left, int bottom, int right, int width, int height, int fill, int x, int y) { // Sets constraints for GridBagLayout
+	public static void setConstraints(int top, int left, int bottom, 
+									  int right, int width, int height, 
+									  int fill, int x, int y) {
 		c.insets = new Insets(top, left, bottom, right);
 		c.gridwidth = width;
 		c.gridheight = height;
@@ -87,7 +94,7 @@ public class Battleship {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		JPanel panel = new JPanel(); // Multiple panels are needed for borders
+		JPanel panel = new JPanel();
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		JPanel grid = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		JPanel playerGrid = new JPanel(new GridBagLayout());
@@ -110,14 +117,17 @@ public class Battleship {
 		
 		// FILE OPENER MENU
 		menuBar.add(menu); 
-		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+		open.setAccelerator(KeyStroke.getKeyStroke(
+			KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		open.addActionListener(new OpenFileChooser());
 		menu.add(open);
-		restartGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		restartGame.setAccelerator(KeyStroke.getKeyStroke(
+			KeyEvent.VK_R, ActionEvent.CTRL_MASK));
 		restartGame.addActionListener(new RestartGame());
 		menu.add(restartGame);
 		menu.addSeparator();
-		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+		exit.setAccelerator(KeyStroke.getKeyStroke(
+			KeyEvent.VK_E, ActionEvent.CTRL_MASK));
 		exit.addActionListener(new Exit());
 		menu.add(exit);
 		
@@ -130,19 +140,22 @@ public class Battleship {
 		topPanel.add(cpuCols, c);
 		
 		// PLAYER GRID PANEL
-		playerGrid.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		playerGrid.setBorder(BorderFactory.createCompoundBorder(
+							 BorderFactory.createLineBorder(Color.BLACK), 
+							 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		setConstraints(0, 0, 0, 10, 1, 10, GridBagConstraints.NONE, 0, 0);
 		playerGrid.add(playerRows, c);
 		setConstraints(0, 0, 0, 0, 1, 1, GridBagConstraints.NONE, 0, 0);
 		
+		//Add buttons
 		for (int row = 0; row < 10; row++) {
 			c.gridy = row;
 			for (int col = 0; col < 10; col++) {
 				c.gridx = col + 1;
-				playerButtons[row][col] = new JButton(); // Creates a button
-				playerButtons[row][col].setPreferredSize(new Dimension(50, 50)); // Sets button size
-				playerButtons[row][col].setForeground(Color.BLUE); // Sets text colour
-				playerGrid.add(playerButtons[row][col], c); // Adds button to grid
+				playerButtons[row][col] = new JButton();
+				playerButtons[row][col].setPreferredSize(new Dimension(50, 50));
+				playerButtons[row][col].setForeground(Color.BLUE); 
+				playerGrid.add(playerButtons[row][col], c);
 			}
 		}
 		
@@ -154,12 +167,14 @@ public class Battleship {
 				cpuButtons[row][col] = new JButton();
 				cpuButtons[row][col].setPreferredSize(new Dimension(50, 50));
 				cpuButtons[row][col].setForeground(Color.RED);
-				cpuButtons[row][col].addActionListener(buttonClicked); // Using a class object instead of creating 100 ActionListener objects
+				cpuButtons[row][col].addActionListener(buttonClicked);
 				cpuGrid.add(cpuButtons[row][col], c);
 			}
 		}
 		
-		cpuGrid.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		cpuGrid.setBorder(BorderFactory.createCompoundBorder(
+						  BorderFactory.createLineBorder(Color.BLACK), 
+						  BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 		setConstraints(0, 0, 0, 10, 1, 10, GridBagConstraints.NONE, 0, 0);
 		cpuGrid.add(cpuRows, c);
 		
@@ -168,8 +183,11 @@ public class Battleship {
 		grid.add(cpuGrid);
 		
 		// MESSAGES PANEL
-		messages.setMaximumSize(new Dimension(1164, messages.getMinimumSize().height));
-		messages.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		messages.setMaximumSize(new Dimension(
+			1164, messages.getMinimumSize().height));
+		messages.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createLineBorder(Color.BLACK), 
+			BorderFactory.createEmptyBorder(1, 1, 1, 1)));
 		playerMessages.setPreferredSize(new Dimension(1160, 50));
 		playerMessages.setFont(new Font("Arial", Font.PLAIN, 12));
 		playerMessages.setForeground(Color.BLUE);
@@ -177,8 +195,16 @@ public class Battleship {
 		cpuMessages.setFont(new Font("Arial", Font.PLAIN, 12));
 		cpuMessages.setForeground(Color.RED);		
 		
-		playerMessages.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "Player Messages", TitledBorder.LEFT, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.PLAIN, 10), Color.BLUE));
-		cpuMessages.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "CPU Messages", TitledBorder.LEFT, TitledBorder.DEFAULT_POSITION, new Font("Arial", Font.PLAIN, 10), Color.RED));
+		playerMessages.setBorder(BorderFactory.createTitledBorder(
+			BorderFactory.createLineBorder(Color.BLACK), 
+			"Player Messages", TitledBorder.LEFT, 
+			TitledBorder.DEFAULT_POSITION, 
+			new Font("Arial", Font.PLAIN, 10), Color.BLUE));
+		cpuMessages.setBorder(BorderFactory.createTitledBorder(
+			BorderFactory.createLineBorder(Color.BLACK),
+			 "CPU Messages", TitledBorder.LEFT, 
+			 TitledBorder.DEFAULT_POSITION, 
+			 new Font("Arial", Font.PLAIN, 10), Color.RED));
 		
 		setConstraints(0, 0, 0, 0, 1, 1, GridBagConstraints.NONE, 0, 0);
 		messages.add(playerMessages, c);
@@ -200,9 +226,9 @@ public class Battleship {
 	}
 	
 	private static class RestartGame implements ActionListener {
-		
-		public void actionPerformed(ActionEvent event) { // Reinitializes all variabels and JComponents
-			startGame = false; // Prevents buttons from being clicked by stopping the ActionListener
+		// Reinitializes all variabels and JComponents
+		public void actionPerformed(ActionEvent event) { 
+			startGame = false;
 			hits[0] = 0;
 			hits[1] = 0;
 			playerMessages.setText("Please open the PLAYER.txt file!");
@@ -221,15 +247,17 @@ public class Battleship {
 		}
 	}
 	
+	// Exit program
 	private static class Exit implements ActionListener {
 		
 		public void actionPerformed(ActionEvent event) {
-			System.exit(0); // Exits program
+			System.exit(0); 
 		}
 	}
 	
 	private static class Buttons implements ActionListener {
 		
+		//Gameplay
 		public void actionPerformed(ActionEvent event) {
 			if (startGame) { // If both files have been loaded
 				Random random = new Random();
@@ -241,57 +269,77 @@ public class Battleship {
 					for (int col = 0; col < 10; col++) {
 						if (cpuButtons[row][col] == event.getSource()) {
 							if (cpuButtons[row][col].getIcon() == null) {
-								if (cpuBoard[row][col] != '*') { // If the player hits a ship
-									cpuButtons[row][col].setText(""); // Removes text in order to align image
+								if (cpuBoard[row][col] != '*') {
+									cpuButtons[row][col].setText("");
 									cpuButtons[row][col].setIcon(new ImageIcon("H.png"));
-									whichShipPlayerHit = cpuBoard[row][col]; // Stores last ship hit in a variable
-									cpuBoard[row][col] = 'H'; // Indicates that a ship has been hit for checking if the ship has sunk
-									playerMessages.setText("<html>Direct hit, nice shot sir!<br>" + shipSank(cpuBoard, whichShipPlayerHit, "You have sunk the computer's ") + "</html>");
-									hits[0]++; // Increases the player's ship hit count
+									whichShipPlayerHit = cpuBoard[row][col];
+									cpuBoard[row][col] = 'H';
+									playerMessages.setText(
+										"<html>Direct hit, nice shot sir!<br>" 
+										+ shipSank(cpuBoard, whichShipPlayerHit,
+										 "You have sunk the computer's ") + 
+										 "</html>");
+									hits[0]++;
 								} else {
 									cpuButtons[row][col].setText("");
 									cpuButtons[row][col].setIcon(new ImageIcon("M.png"));
 									cpuBoard[row][col] = 'M';
 									playerMessages.setText("You have missed sir!");
 								}
-								
-								if (hits[0] != 17) { // If the player hasn't won, the CPU makes a move
+
+								// If the player hasn't won, the CPU makes a move
+								if (hits[0] != 17) { 
 									do {
 										cpuRow = random.nextInt(10);
 										cpuCol = random.nextInt(10);
-									} while (playerButtons[cpuRow][cpuCol].getIcon() != null); // Generates a move that has not been previously made
+									} while (playerButtons[cpuRow][cpuCol].getIcon() != null);
 									
-									if (playerBoard[cpuRow][cpuCol] != '*') { // If the CPU hits a ship
+									if (playerBoard[cpuRow][cpuCol] != '*') {
 										playerButtons[cpuRow][cpuCol].setText("");
-										playerButtons[cpuRow][cpuCol].setIcon(new ImageIcon("H.png"));
+										playerButtons[cpuRow][cpuCol].setIcon(
+											new ImageIcon("H.png"));
 										whichShipCpuHit = playerBoard[cpuRow][cpuCol];
 										playerBoard[cpuRow][cpuCol] = 'H';
-										cpuMessages.setText("<html>The computer has attacked " + (char) (cpuRow + 65) + cpuCol + " and hit your " + whichShip(whichShipCpuHit) + "<br>" + shipSank(playerBoard, whichShipCpuHit, "The computer has sunk your ") + "</html>");
+										cpuMessages.setText(
+											"<html>The computer has attacked " + 
+											(char) (cpuRow + 65) + cpuCol +
+											 " and hit your " + whichShip(whichShipCpuHit) + 
+											 "<br>" + shipSank(playerBoard, 
+											 whichShipCpuHit, 
+											 "The computer has sunk your ") + "</html>");
 										hits[1]++;
 									} else { // If the CPU misses
 										playerButtons[cpuRow][cpuCol].setText("");
-										playerButtons[cpuRow][cpuCol].setIcon(new ImageIcon("M.png"));
+										playerButtons[cpuRow][cpuCol].setIcon(
+											new ImageIcon("M.png"));
 										playerBoard[cpuRow][cpuCol] = 'M';
-										cpuMessages.setText("The computer has attacked " + (char) (cpuRow + 65) + cpuCol + " and missed!");
+										cpuMessages.setText(
+											"The computer has attacked " +
+											 (char) (cpuRow + 65) 
+											 + cpuCol + " and missed!");
 									}
 								}
 							}
-							break search; // Exits the search for the button clicked if the button has been found
+							break search;
 						}
 					}
 				}
-				
-				if (hits[0] == 17 || hits[1] == 17) { // If someone has won
-					for (int row = 0; row < 10; row++) { // Disables all buttons
+
+				// If someone has won
+				if (hits[0] == 17 || hits[1] == 17) { 
+					// Disables all buttons
+					for (int row = 0; row < 10; row++) { 
 						for (int col = 0; col < 10; col++) {
 							playerButtons[row][col].setEnabled(false);
 							cpuButtons[row][col].setEnabled(false);
 						}
 					}
 					if (hits[0] == 17) { // Displays message
-						JOptionPane.showMessageDialog(frame, "The player has won the game!");
+						JOptionPane.showMessageDialog(frame, 
+						"The player has won the game!");
 					} else {
-						JOptionPane.showMessageDialog(frame, "The computer has won the game!");
+						JOptionPane.showMessageDialog(frame, 
+						"The computer has won the game!");
 					}
 				}
 			}
@@ -304,8 +352,9 @@ public class Battleship {
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.showOpenDialog(null);
 			
-			// If game has not been restarted or is currently running, do not open files; last condition prevents NullPointerException
-			if (cpuButtons[0][0].isEnabled() && !startGame && fileChooser.getSelectedFile() != null) {
+			if (cpuButtons[0][0].isEnabled() && 
+				!startGame && 
+				fileChooser.getSelectedFile() != null) {
 				if (fileChooser.getSelectedFile().getName().equals("PLAYER.txt")) {
 					try {
 						loadFile(playerBoard, "PLAYER.txt");
@@ -315,7 +364,8 @@ public class Battleship {
 					
 					for (int row = 0; row < 10; row++) {
 						for (int col = 0; col < 10; col++) {
-							playerButtons[row][col].setText(String.valueOf(playerBoard[row][col]));
+							playerButtons[row][col].setText(
+								String.valueOf(playerBoard[row][col]));
 						}
 					}
 					
@@ -336,7 +386,8 @@ public class Battleship {
 					cpuMessages.setText("File Loaded!");
 				}
 				
-				if (playerMessages.getText().equals("File Loaded!") && cpuMessages.getText().equals("File Loaded!")) {
+				if (playerMessages.getText().equals("File Loaded!") && 
+					cpuMessages.getText().equals("File Loaded!")) {
 					startGame = true; // Ready to start game once both files are loaded
 				}
 			}
